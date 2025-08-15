@@ -1,0 +1,14 @@
+{
+  "printWidth": 120,
+  "tabWidth": 4,
+  "wrapAttributes": "auto",
+  "wrapAttributesMinAttrs": 2,
+  "sortTailwindcssClasses": true,
+  "sortHtmlAttributes": "none",
+  "noPhpSyntaxCheck": false,
+  "indentInnerHtml": true,
+  "extraLiners": "",
+  "trailingCommaPHP": true,
+  "componentPrefix": "x-,livewire:",
+  "phpVersion": "8.4"
+}
