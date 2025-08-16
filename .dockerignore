@@ -1,0 +1,14 @@
+/node_modules
+/vendor
+/.git
+/.vscode
+.env
+/bootstrap/cache/*
+/storage/*.key
+/storage/pail
+/tests
+/public/build
+/public/hot
+/public/storage
+Dockerfile
+docker-compose.yml
