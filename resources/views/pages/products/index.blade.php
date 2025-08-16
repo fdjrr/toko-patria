@@ -27,34 +27,40 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px"
+    <div id="dlg" class="easyui-dialog" style="width:600px"
         data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
-            <div style="margin-bottom:10px">
-                <input name="code" class="easyui-textbox" required="true" label="Code:"
-                    data-options="labelPosition: 'top'" style="width:100%" />
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="name" class="easyui-textbox" required="true" label="Name:"
-                    data-options="labelPosition: 'top'" style="width:100%" />
+            <div style="display:flex; gap:20px; margin-bottom:10px">
+                <div style="flex:1">
+                    <input name="code" class="easyui-textbox" required="true" label="Code:"
+                        data-options="labelPosition: 'top'" style="width:100%" />
+                </div>
+                <div style="flex:1">
+                    <input name="name" class="easyui-textbox" required="true" label="Name:"
+                        data-options="labelPosition: 'top'" style="width:100%" />
+                </div>
             </div>
             <div style="margin-bottom:10px">
                 <input name="part_code" class="easyui-textbox" required="true" label="Part Code:"
                     data-options="labelPosition: 'top'" style="width:100%" />
             </div>
-            <div style="margin-bottom:10px">
-                <input name="category_id" id="category_id" required="true" style="width:100%" />
+            <div style="display:flex; gap:20px; margin-bottom:10px">
+                <div style="flex:1">
+                    <input name="category_id" id="category_id" required="true" style="width:100%" />
+                </div>
+                <div style="flex:1">
+                    <input name="brand_id" id="brand_id" required="true" style="width:100%" />
+                </div>
             </div>
-            <div style="margin-bottom:10px">
-                <input name="brand_id" id="brand_id" required="true" style="width:100%" />
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="price" class="easyui-textbox" required="true" label="Price:"
-                    data-options="labelPosition: 'top'" style="width:100%" />
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="stock" class="easyui-textbox" required="true" label="Stock:"
-                    data-options="labelPosition: 'top'" style="width:100%" />
+            <div style="display:flex; gap:20px; margin-bottom:10px">
+                <div style="flex:1">
+                    <input name="price" class="easyui-textbox" required="true" label="Price:"
+                        data-options="labelPosition: 'top'" style="width:100%" />
+                </div>
+                <div style="flex:1">
+                    <input name="stock" class="easyui-textbox" required="true" label="Stock:"
+                        data-options="labelPosition: 'top'" style="width:100%" />
+                </div>
             </div>
             <div style="margin-bottom:10px">
                 <input name="keywords" id="kw" class="easyui-textbox" multiline="true" label="Keywords:"
