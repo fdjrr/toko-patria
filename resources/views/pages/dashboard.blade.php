@@ -1,3 +1,3 @@
 <x-app-layout title="Dashboard">
-    <p>Toko Patria</p>
+    <p>{{ config('app.name') }}</p>
 </x-app-layout>
