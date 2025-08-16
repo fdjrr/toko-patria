@@ -1,16 +1,25 @@
 <x-app-layout title="{{ $page_meta['title'] }}">
-    <table id="dg" class="easyui-datagrid" url="{{ route('products.getProduct') }}" toolbar="#toolbar" pagination="true"
-        rownumbers="true" fitColumns="true" singleSelect="true" fit="true">
+    <table id="dg" class="easyui-datagrid" data-options="
+        url: '{{ route('products.getProduct') }}',
+        toolbar: '#toolbar',
+        pagination: true,
+        rownumbers: true,
+        fitColumns: true,
+        singleSelect: true,
+        fit: true,
+        remoteSort: false,
+        multiSort: true
+    ">
         <thead>
             <tr>
-                <th field="code" width="10">Code</th>
-                <th field="name" width="10">Name</th>
-                <th field="part_code" width="10">Part Code</th>
-                <th field="category_name" width="10">Category</th>
-                <th field="brand_name" width="10">Brand</th>
-                <th field="price" width="10">Price</th>
-                <th field="stock" width="10">Stock</th>
-                <th field="description" width="10">Description</th>
+                <th data-options="field:'code', width:10,sortable:true">Code</th>
+                <th data-options="field:'name', width:10,sortable:true">Name</th>
+                <th data-options="field:'part_code', width:10,sortable:true">Part Code</th>
+                <th data-options="field:'category_name', width:10,sortable:true">Category</th>
+                <th data-options="field:'brand_name', width:10,sortable:true">Brand</th>
+                <th data-options="field:'price', width:10,sortable:true">Price</th>
+                <th data-options="field:'stock', width:10,sortable:true">Stock</th>
+                <th data-options="field:'description', width:10">Description</th>
             </tr>
         </thead>
     </table>
@@ -30,19 +39,19 @@
     <div id="dlg" class="easyui-dialog" style="width:600px"
         data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
+            <div style="margin-bottom:10px">
+                <input name="name" class="easyui-textbox" required="true" label="Name:"
+                    data-options="labelPosition: 'top'" style="width:100%" />
+            </div>
             <div style="display:flex; gap:20px; margin-bottom:10px">
                 <div style="flex:1">
                     <input name="code" class="easyui-textbox" required="true" label="Code:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
                 <div style="flex:1">
-                    <input name="name" class="easyui-textbox" required="true" label="Name:"
+                    <input name="part_code" class="easyui-textbox" required="true" label="Part Code:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
-            </div>
-            <div style="margin-bottom:10px">
-                <input name="part_code" class="easyui-textbox" required="true" label="Part Code:"
-                    data-options="labelPosition: 'top'" style="width:100%" />
             </div>
             <div style="display:flex; gap:20px; margin-bottom:10px">
                 <div style="flex:1">
