@@ -17,8 +17,8 @@
                 <th data-options="field:'part_code', width:10,sortable:true">Part Code</th>
                 <th data-options="field:'category_name', width:10,sortable:true">Category</th>
                 <th data-options="field:'brand_name', width:10,sortable:true">Brand</th>
-                <th data-options="field:'price', width:10,sortable:true">Price</th>
-                <th data-options="field:'stock', width:10,sortable:true">Stock</th>
+                <th data-options="field:'price', width:10,sortable:true,sorter:numSorter">Price</th>
+                <th data-options="field:'stock', width:10,sortable:true,sorter:numSorter">Stock</th>
                 <th data-options="field:'description', width:10">Description</th>
             </tr>
         </thead>
