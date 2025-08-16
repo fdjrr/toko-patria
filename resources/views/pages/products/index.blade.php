@@ -160,6 +160,12 @@
                 })
             })
 
+            function numSorter(a, b) {
+                a = parseFloat(a);
+                b = parseFloat(b);
+                return a == b ? 0 : (a > b ? 1 : -1);
+            }
+
             var url;
 
             function newProduct() {
