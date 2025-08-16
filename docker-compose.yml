@@ -1,5 +1,5 @@
 services:
-  hris:
+  toko-patria:
     build:
       context: .
       dockerfile: Dockerfile
