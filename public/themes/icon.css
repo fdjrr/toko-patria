@@ -94,3 +94,18 @@
 .icon-large-chart{
 	background:url('icons/large_chart.png') no-repeat center center;
 }
+.icon-dashboard{
+   background:url('icons/dashboard.png') no-repeat center center;
+}
+.icon-money{
+   background:url('icons/money.png') no-repeat center center;
+}
+.icon-money-bundle{
+   background:url('icons/money-bundle.png') no-repeat center center;
+}
+.icon-database{
+   background:url('icons/database.png') no-repeat center center;
+}
+.icon-contacts{
+   background:url('icons/contacts.png') no-repeat center center;
+}

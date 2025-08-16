@@ -13,17 +13,15 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product_discounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained('product_brands')->cascadeOnDelete();
-            $table->string('code');
-            $table->string('name');
-            $table->string('part_code');
-            $table->decimal('price', 18, 2)->default(0);
-            $table->unsignedBigInteger('stock')->default(0);
-            $table->text('keywords')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->enum('discount_type', ['percentage', 'fixed'])->default('percentage');
+            $table->decimal('discount_value', 18, 2)->default(0);
+            $table->decimal('min_purchase', 18, 2)->default(0);
+            $table->dateTime('start_date')->nullable();
+            $table->dateTime('end_date')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,7 +36,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_discounts');
 
         Schema::enableForeignKeyConstraints();
     }

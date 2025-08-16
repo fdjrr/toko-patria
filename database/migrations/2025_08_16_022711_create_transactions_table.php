@@ -13,17 +13,17 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained('product_brands')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->string('code');
-            $table->string('name');
-            $table->string('part_code');
-            $table->decimal('price', 18, 2)->default(0);
-            $table->unsignedBigInteger('stock')->default(0);
-            $table->text('keywords')->nullable();
-            $table->text('description')->nullable();
+            $table->string('shipment_no');
+            $table->enum('channel', ['store', 'online'])->default('store');
+            $table->date('transaction_date');
+            $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
+            $table->decimal('total_amount', 18, 2)->default(0);
+            $table->enum('payment_method', ['cash', 'transfer'])->default('cash');
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,7 +38,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('transactions');
 
         Schema::enableForeignKeyConstraints();
     }

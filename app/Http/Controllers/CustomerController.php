@@ -2,45 +2,52 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductBrand;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Throwable;
 
-class ProductBrandController extends Controller
+class CustomerController extends Controller
 {
     public function index()
     {
-        return view('pages.product_brands.index', [
+        return view('pages.customers.index', [
             'page_meta' => [
-                'title' => 'Product Brand',
+                'title' => 'Customers',
             ],
         ]);
     }
 
-    public function getBrand(Request $request)
+    public function getCustomer(Request $request)
     {
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
 
-        $product_brands = ProductBrand::query()->filter([
+        $customers = Customer::query()->filter([
             'search' => $search,
         ])->orderBy('name');
 
-        $total = $product_brands->count();
+        $total = $customers->count();
 
         if ($page && $rows) {
-            $product_brands = $product_brands
+            $customers = $customers
                 ->limit($rows)
                 ->offset(($page - 1) * $rows)
                 ->get();
         } else {
-            $product_brands = $product_brands->get();
+            $customers = $customers->get();
         }
 
-        $rows = collect($product_brands)->map(fn ($product_brand) => [
-            'id' => $product_brand->id,
-            'name' => $product_brand->name,
+        $rows = collect($customers)->map(fn ($customer) => [
+            'id' => $customer->id,
+            'code' => $customer->code,
+            'name' => $customer->name,
+            'phone_number' => $customer->phone_number,
+            'address' => $customer->address,
+            'city_id' => $customer->city_id,
+            'city_name' => $customer->city?->name,
+            'province_id' => $customer->province_id,
+            'province_name' => $customer->province?->name,
         ])->toArray();
 
         return response()->json([
@@ -52,13 +59,17 @@ class ProductBrandController extends Controller
     public function store(Request $request)
     {
         try {
-            $product_brand = ProductBrand::create([
+            $customer = Customer::create([
                 'name' => $request->name,
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+                'city_id' => $request->city_id,
+                'province_id' => $request->province_id,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data' => $product_brand,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([
@@ -68,16 +79,20 @@ class ProductBrandController extends Controller
         }
     }
 
-    public function update(Request $request, ProductBrand $product_brand)
+    public function update(Request $request, Customer $customer)
     {
         try {
-            $product_brand->update([
+            $customer->update([
                 'name' => $request->name,
+                'phone_number' => $request->phone_number,
+                'address' => $request->address,
+                'city_id' => $request->city_id,
+                'province_id' => $request->province_id,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data' => $product_brand,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([
@@ -87,14 +102,14 @@ class ProductBrandController extends Controller
         }
     }
 
-    public function destroy(ProductBrand $product_brand)
+    public function destroy(Customer $customer)
     {
         try {
-            $product_brand->delete();
+            $customer->delete();
 
             return response()->json([
                 'success' => true,
-                'data' => $product_brand,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([

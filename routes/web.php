@@ -1,16 +1,29 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDiscountController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('pages/dashboard');
-});
+Route::get('/', fn () => view('pages/dashboard'))->name('dashboard');
 
 Route::prefix('products')->group(function () {
     Route::get('', [ProductController::class, 'index'])->name('products.index');
+});
+
+Route::prefix('transactions')->group(function () {
+    Route::get('', [TransactionController::class, 'index'])->name('transactions.index');
+});
+
+Route::prefix('customers')->group(function () {
+    Route::get('', [CustomerController::class, 'index'])->name('customers.index');
+});
+
+Route::prefix('product_discounts')->group(function () {
+    Route::get('', [ProductDiscountController::class, 'index'])->name('product_discounts.index');
 });
 
 Route::prefix('product_categories')->group(function () {

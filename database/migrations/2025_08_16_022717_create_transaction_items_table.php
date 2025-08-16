@@ -13,17 +13,14 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('transaction_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained('product_brands')->cascadeOnDelete();
-            $table->string('code');
-            $table->string('name');
-            $table->string('part_code');
+            $table->foreignId('transaction_id')->constrained('transactions')->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->decimal('price', 18, 2)->default(0);
-            $table->unsignedBigInteger('stock')->default(0);
-            $table->text('keywords')->nullable();
-            $table->text('description')->nullable();
+            $table->unsignedBigInteger('qty')->default(0);
+            $table->decimal('discount', 18, 2)->default(0);
+            $table->decimal('subtotal', 18, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,7 +35,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('transaction_items');
 
         Schema::enableForeignKeyConstraints();
     }

@@ -13,17 +13,13 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('product_reviews', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id')->constrained('product_categories')->cascadeOnDelete();
-            $table->foreignId('brand_id')->constrained('product_brands')->cascadeOnDelete();
-            $table->string('code');
-            $table->string('name');
-            $table->string('part_code');
-            $table->decimal('price', 18, 2)->default(0);
-            $table->unsignedBigInteger('stock')->default(0);
-            $table->text('keywords')->nullable();
-            $table->text('description')->nullable();
+            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
+            $table->unsignedTinyInteger('rating')->default(1);
+            $table->text('review')->nullable();
+            $table->boolean('is_verified')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -38,7 +34,7 @@ return new class extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('product_reviews');
 
         Schema::enableForeignKeyConstraints();
     }

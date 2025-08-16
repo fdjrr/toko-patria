@@ -13,16 +13,16 @@ class ProductController extends Controller
     {
         return view('pages.products.index', [
             'page_meta' => [
-                'title' => 'Products'
-            ]
+                'title' => 'Products',
+            ],
         ]);
     }
 
     public function getProduct(Request $request)
     {
         $search = $request->q;
-        $page   = $request->page;
-        $rows   = $request->rows;
+        $page = $request->page;
+        $rows = $request->rows;
 
         $products = Product::query()
             ->with([
@@ -46,29 +46,29 @@ class ProductController extends Controller
         }
 
         $rows = collect($products)->map(fn ($product) => [
-            'id'            => $product->id,
-            'code'          => $product->code,
-            'name'          => $product->name,
-            'part_code'     => $product->part_code,
-            'category_id'   => $product->category_id,
+            'id' => $product->id,
+            'code' => $product->code,
+            'name' => $product->name,
+            'part_code' => $product->part_code,
+            'category_id' => $product->category_id,
             'category_name' => $product->product_category?->name,
-            'brand_id'      => $product->brand_id,
-            'brand_name'    => $product->product_brand?->name,
-            'price'         => $product->price,
-            'stock'         => $product->stock,
-            'keywords'      => $product->keywords,
-            'description'   => $product->description
+            'brand_id' => $product->brand_id,
+            'brand_name' => $product->product_brand?->name,
+            'price' => $product->price,
+            'stock' => $product->stock,
+            'keywords' => $product->keywords,
+            'description' => $product->description,
         ])->toArray();
 
         return response()->json([
-            'rows'  => $rows,
+            'rows' => $rows,
             'total' => $total,
         ]);
     }
 
     public function generateKeywords(Request $request)
     {
-        $name        = $request->name;
+        $name = $request->name;
         $description = $request->description;
 
         $system = "
@@ -94,18 +94,18 @@ keyword1,keyword2,keyword3,keyword4
                 ->generateContent([
                     $system,
                     $name,
-                    $description
+                    $description,
                 ])
                 ->text();
 
             return response()->json([
                 'success' => true,
-                'data'    => $result
+                'data' => $result,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -114,25 +114,25 @@ keyword1,keyword2,keyword3,keyword4
     {
         try {
             $product = Product::create([
-                'code'        => $request->code,
-                'name'        => $request->name,
-                'part_code'   => $request->part_code,
+                'code' => $request->code,
+                'name' => $request->name,
+                'part_code' => $request->part_code,
                 'category_id' => $request->category_id,
-                'brand_id'    => $request->brand_id,
-                'price'       => $request->price,
-                'stock'       => $request->stock,
-                'keywords'    => $request->keywords,
+                'brand_id' => $request->brand_id,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'keywords' => $request->keywords,
                 'description' => $request->description,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data'    => $product
+                'data' => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -141,25 +141,25 @@ keyword1,keyword2,keyword3,keyword4
     {
         try {
             $product->update([
-                'code'        => $request->code,
-                'name'        => $request->name,
-                'part_code'   => $request->part_code,
+                'code' => $request->code,
+                'name' => $request->name,
+                'part_code' => $request->part_code,
                 'category_id' => $request->category_id,
-                'brand_id'    => $request->brand_id,
-                'price'       => $request->price,
-                'stock'       => $request->stock,
-                'keywords'    => $request->keywords,
+                'brand_id' => $request->brand_id,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'keywords' => $request->keywords,
                 'description' => $request->description,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data'    => $product
+                'data' => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -171,12 +171,12 @@ keyword1,keyword2,keyword3,keyword4
 
             return response()->json([
                 'success' => true,
-                'data'    => $product
+                'data' => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }

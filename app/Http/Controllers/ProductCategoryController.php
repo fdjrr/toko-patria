@@ -12,16 +12,16 @@ class ProductCategoryController extends Controller
     {
         return view('pages.product_categories.index', [
             'page_meta' => [
-                'title' => 'Product Category'
-            ]
+                'title' => 'Product Category',
+            ],
         ]);
     }
 
     public function getCategory(Request $request)
     {
         $search = $request->q;
-        $page   = $request->page;
-        $rows   = $request->rows;
+        $page = $request->page;
+        $rows = $request->rows;
 
         $product_categories = ProductCategory::query()
             ->with(['parent'])
@@ -42,14 +42,14 @@ class ProductCategoryController extends Controller
         }
 
         $rows = collect($product_categories)->map(fn ($product_category) => [
-            'id'          => $product_category->id,
-            'parent_id'   => $product_category->parent_id,
+            'id' => $product_category->id,
+            'parent_id' => $product_category->parent_id,
             'parent_name' => $product_category->parent?->name,
-            'name'        => $product_category->name,
+            'name' => $product_category->name,
         ])->toArray();
 
         return response()->json([
-            'rows'  => $rows,
+            'rows' => $rows,
             'total' => $total,
         ]);
     }
@@ -59,17 +59,17 @@ class ProductCategoryController extends Controller
         try {
             $product_category = ProductCategory::create([
                 'parent_id' => $request->parent_id,
-                'name'      => $request->name,
+                'name' => $request->name,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data'    => $product_category
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -79,17 +79,17 @@ class ProductCategoryController extends Controller
         try {
             $product_category->update([
                 'parent_id' => $request->parent_id,
-                'name'      => $request->name,
+                'name' => $request->name,
             ]);
 
             return response()->json([
                 'success' => true,
-                'data'    => $product_category
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -101,12 +101,12 @@ class ProductCategoryController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'    => $product_category
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ]);
         }
     }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -17,9 +18,9 @@ class Product extends Model
 
     public function scopeFilter(Builder $query, array $filters = [])
     {
-        $search      = $filters['search'] ?? null;
+        $search = $filters['search'] ?? null;
         $category_id = $filters['category_id'] ?? null;
-        $brand_id    = $filters['brand_id'] ?? null;
+        $brand_id = $filters['brand_id'] ?? null;
 
         $query->when($search, fn (Builder $query, $search) => $query
             ->whereLike('code', "%$search%")
@@ -33,8 +34,6 @@ class Product extends Model
 
     /**
      * Get the product_category that owns the Product
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product_category(): BelongsTo
     {
@@ -43,11 +42,17 @@ class Product extends Model
 
     /**
      * Get the product_brand that owns the Product
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function product_brand(): BelongsTo
     {
         return $this->belongsTo(ProductBrand::class, 'brand_id', 'id');
+    }
+
+    /**
+     * Get all of the product_reviews for the Product
+     */
+    public function product_reviews(): HasMany
+    {
+        return $this->hasMany(ProductReview::class, 'product_id', 'id');
     }
 }
