@@ -1,0 +1,21 @@
+services:
+  hris:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: toko-patria
+    ports:
+      - "8000:8000"
+    volumes:
+      - data:/app/storage/app
+      - ./.env:/app/.env
+      - ./php.ini:/usr/local/etc/php/conf.d/custom.ini
+    networks:
+      - homelabs
+
+volumes:
+  data:
+
+networks:
+  homelabs:
+    external: true
