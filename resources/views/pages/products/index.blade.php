@@ -36,37 +36,36 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:600px"
-        data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom:10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"
                     data-options="labelPosition: 'top'" style="width:100%" />
             </div>
-            <div style="display:flex; gap:20px; margin-bottom:10px">
-                <div style="flex:1">
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
+                <div style="margin-bottom:10px">
                     <input name="code" class="easyui-textbox" required="true" label="Code:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
-                <div style="flex:1">
+                <div style="margin-bottom:10px">
                     <input name="part_code" class="easyui-textbox" required="true" label="Part Code:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
             </div>
-            <div style="display:flex; gap:20px; margin-bottom:10px">
-                <div style="flex:1">
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
+                <div style="margin-bottom:10px">
                     <input name="category_id" id="category_id" required="true" style="width:100%" />
                 </div>
-                <div style="flex:1">
+                <div style="margin-bottom:10px">
                     <input name="brand_id" id="brand_id" required="true" style="width:100%" />
                 </div>
             </div>
-            <div style="display:flex; gap:20px; margin-bottom:10px">
-                <div style="flex:1">
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
+                <div style="margin-bottom:10px">
                     <input name="price" class="easyui-textbox" required="true" label="Price:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
-                <div style="flex:1">
+                <div style="margin-bottom:10px">
                     <input name="stock" class="easyui-textbox" required="true" label="Stock:"
                         data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
@@ -85,11 +84,10 @@
             </div>
         </form>
     </div>
-    <div id="dlg-buttons">
+    <div id="dlg-buttons" style="text-align: right; padding: 5px;">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveProduct()"
-            style="width:90px">Save</a>
+            onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveProduct()">Save</a>
     </div>
 
     @push('scripts')
@@ -189,15 +187,11 @@
 
                     $("#fm").form("load", row);
 
-                    $('#category_id').combogrid('setValue', {
-                        id: row.category_id,
-                        name: row.category_name
-                    })
+                    $('#category_id').combogrid('setValue', row.category_id)
+                    $('#category_id').combogrid('setText', row.category_name)
 
-                    $('#brand_id').combogrid('setValue', {
-                        id: row.brand_id,
-                        name: row.brand_name
-                    })
+                    $('#brand_id').combogrid('setValue', row.brand_id)
+                    $('#brand_id').combogrid('setText', row.brand_name)
 
                     $('#kw').textbox('setValue', row.keywords);
 

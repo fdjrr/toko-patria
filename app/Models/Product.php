@@ -25,6 +25,7 @@ class Product extends Model
         $query->when($search, fn (Builder $query, $search) => $query
             ->whereLike('code', "%$search%")
             ->orWhereLike('name', "%$search%")
+            ->orWhereLike('keywords', "%$search%")
             ->orWhereLike('description', "%$search%"));
 
         $query->when($category_id, fn (Builder $query, $category_id) => $query->where('category_id', $category_id));

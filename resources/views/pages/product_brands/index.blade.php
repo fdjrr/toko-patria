@@ -21,8 +21,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px"
-        data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:400px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"
@@ -30,11 +29,10 @@
             </div>
         </form>
     </div>
-    <div id="dlg-buttons">
+    <div id="dlg-buttons" style="text-align: right; padding: 5px;">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveBrand()"
-            style="width:90px">Save</a>
+            onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveBrand()">Save</a>
     </div>
 
     @push('scripts')

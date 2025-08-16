@@ -27,8 +27,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px"
-        data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:400px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"
@@ -42,21 +41,20 @@
                 <input name="address" class="easyui-textbox" required="true" label="Address:"
                     data-options="labelPosition: 'top'" style="width:100%;height:120px;" multiline="true" />
             </div>
-            <div style="display:flex; gap:20px; margin-bottom:10px">
-                <div style="flex:1">
+            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
+                <div style="margin-bottom: 10px">
                     <input name="province_id" id="province_id" style="width:100%" />
                 </div>
-                <div style="flex:1">
+                <div style="margin-bottom: 10px">
                     <input name="city_id" id="city_id" style="width:100%" />
                 </div>
             </div>
         </form>
     </div>
-    <div id="dlg-buttons">
+    <div id="dlg-buttons" style="text-align: right; padding: 5px;">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCustomer()"
-            style="width:90px">Save</a>
+            onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCustomer()">Save</a>
     </div>
 
     @push('scripts')
@@ -126,15 +124,11 @@
 
                     $("#fm").form("load", row);
 
-                    $('#province_id').combogrid('setValue', {
-                        id: row.province_id,
-                        name: row.province_name
-                    })
+                    $('#province_id').combogrid('setValue', row.province_id)
+                    $('#province_id').combogrid('setText', row.province_name)
 
-                    $('#city_id').combogrid('setValue', {
-                        id: row.city_id,
-                        name: row.city_name
-                    })
+                    $('#city_id').combogrid('setValue', row.city_id)
+                    $('#city_id').combogrid('setText', row.city_name)
 
                     url = "{{ route('customers.update', ':id') }}";
                     url = url.replace(":id", row.id);

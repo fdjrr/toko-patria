@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('themes/icon.css') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    @stack('styles')
 </head>
 
 <body>

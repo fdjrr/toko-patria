@@ -23,8 +23,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:400px"
-        data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:400px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
                 <input name="parent_id" id="parent_id" style="width:100%" />
@@ -35,11 +34,10 @@
             </div>
         </form>
     </div>
-    <div id="dlg-buttons">
+    <div id="dlg-buttons" style="text-align: right; padding: 5px;">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveCategory()"
-            style="width:90px">Save</a>
+            onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-ok" onclick="saveCategory()">Save</a>
     </div>
 
     @push('scripts')
@@ -82,10 +80,8 @@
 
                     $("#fm").form("load", row);
 
-                    $('#parent_id').combogrid('setValue', {
-                        id: row.parent_id,
-                        name: row.parent_name
-                    })
+                    $('#parent_id').combogrid('setValue', row.parent_id)
+                    $('#parent_id').combogrid('setText', row.parent_name)
 
                     url = "{{ route('product_categories.update', ':id') }}";
                     url = url.replace(":id", row.id);

@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ProductDiscount extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'product_categories';
+    protected $table = 'product_discounts';
 
     protected $guarded = ['id'];
 
@@ -30,5 +31,13 @@ class ProductDiscount extends Model
                 ->where('start_date', '<=', $end_date)
                 ->where('end_date', '>=', $start_date);
         });
+    }
+
+    /**
+     * Get the product that owns the ProductDiscount
+     */
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
     }
 }

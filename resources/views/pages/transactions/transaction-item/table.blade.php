@@ -13,6 +13,7 @@
                 <th data-options="field:'product_name',width:50">Name</th>
                 <th data-options="field:'qty',width:50,editor:'textbox'">Qty</th>
                 <th data-options="field:'price',width:50,editor:'textbox'">Price</th>
+                <th data-options="field:'discount',width:50,editor:'textbox'">Disc</th>
             </tr>
         </thead>
     </table>
@@ -27,12 +28,6 @@
             onclick="reject()">Reject</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true"
             onclick="accept()">Accept</a>
-    </div>
-    <div id="dlg-buttons">
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-            onclick="javascript:$('#dlg').dialog('close')" style="width:90px">Cancel</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="saveTransaction()"
-            style="width:90px">Save</a>
     </div>
 </div>
 
@@ -54,6 +49,7 @@
                         product_name: row.name,
                         qty: 1,
                         price: row.price,
+                        discount: 0
                     });
                 }
                 $('#win-products').window('close');

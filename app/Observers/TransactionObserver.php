@@ -8,15 +8,17 @@ class TransactionObserver
 {
     public function creating(Transaction $transaction)
     {
-        $today = now()->format('Ymd');
+        $now = now();
+        $today = $now->format('Ymd');
 
         $lastTransaction = Transaction::query()
-            ->whereDate('transaction_date', now()->toDateString())
+            ->whereDate('transaction_date', $now->format('Y-m-d'))
             ->orderBy('id', 'desc')
             ->first();
 
         if ($lastTransaction) {
-            $lastNumber = (int) substr($lastTransaction->transaction_code, -4);
+            $lastCode = explode('-', $lastTransaction->code);
+            $lastNumber = end($lastCode);
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;

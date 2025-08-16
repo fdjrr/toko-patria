@@ -19,6 +19,7 @@ Route::prefix('products')->group(function () {
 Route::prefix('transactions')->group(function () {
     Route::post('getTransaction', [TransactionController::class, 'getTransaction'])->name('transactions.getTransaction');
     Route::post('store', [TransactionController::class, 'store'])->name('transactions.store');
+    Route::post('{transaction}/items', [TransactionController::class, 'getItems'])->name('transactions.getItems');
     Route::post('{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
     Route::post('{transaction}/destroy', [TransactionController::class, 'destroy'])->name('transactions.destroy');
 });
