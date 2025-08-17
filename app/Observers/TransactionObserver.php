@@ -12,6 +12,7 @@ class TransactionObserver
         $today = $now->format('Ymd');
 
         $lastTransaction = Transaction::query()
+            ->withTrashed()
             ->whereDate('transaction_date', $now->format('Y-m-d'))
             ->orderBy('id', 'desc')
             ->first();

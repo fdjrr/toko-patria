@@ -1,4 +1,4 @@
-<div id="win-products" class="easyui-window" title="Select Product" style="width:600px;height:400px"
+<div id="win-products" class="easyui-window" title="Select Product" style="width:800px;height:500px"
     data-options="closed:true">
     <table id="dg-products" class="easyui-datagrid" url="{{ route('products.getProduct') }}"
         style="width:100%;height:100%" singleSelect="true" fitColumns="true" pagination="true" rownumbers="true"

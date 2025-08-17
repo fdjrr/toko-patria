@@ -1,19 +1,19 @@
 <div>
     <h4>Transaction Items</h4>
     <table id="dg-items" class="easyui-datagrid" style="width:100%;height:200px" data-options="
-            singleSelect:true,
-            fitColumns:true,
-            toolbar:'#toolbar-items',
-            footer:'#footer-items',
-            onClickCell:onClickCell
-        ">
+        singleSelect:true,
+        fitColumns:true,
+        toolbar:'#toolbar-items',
+        footer:'#footer-items',
+        onClickCell:onClickCell,
+    ">
         <thead>
             <tr>
                 <th data-options="field:'product_code',width:50">Code</th>
                 <th data-options="field:'product_name',width:50">Name</th>
                 <th data-options="field:'qty',width:50,editor:'textbox'">Qty</th>
                 <th data-options="field:'price',width:50,editor:'textbox'">Price</th>
-                <th data-options="field:'discount',width:50,editor:'textbox'">Disc</th>
+                <th data-options="field:'extra_disc',width:50,editor:'textbox'">Extra Disc</th>
             </tr>
         </thead>
     </table>
@@ -49,7 +49,7 @@
                         product_name: row.name,
                         qty: 1,
                         price: row.price,
-                        discount: 0
+                        extra_disc: 0
                     });
                 }
                 $('#win-products').window('close');

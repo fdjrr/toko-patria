@@ -15,6 +15,11 @@ class ProductDiscount extends Model
 
     protected $guarded = ['id'];
 
+    public function scopeIsActive(Builder $query)
+    {
+        $query->where('is_active', true);
+    }
+
     public function scopeFilter(Builder $query, array $filters = [])
     {
         $product_id = $filters['product_id'] ?? null;

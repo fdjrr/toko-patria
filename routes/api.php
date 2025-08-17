@@ -5,16 +5,9 @@ use App\Http\Controllers\IndonesiaController;
 use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
-
-Route::prefix('products')->group(function () {
-    Route::post('getProduct', [ProductController::class, 'getProduct'])->name('products.getProduct');
-    Route::post('store', [ProductController::class, 'store'])->name('products.store');
-    Route::post('generateKeywords', [ProductController::class, 'generateKeywords'])->name('products.generateKeywords');
-    Route::post('{product}/update', [ProductController::class, 'update'])->name('products.update');
-    Route::post('{product}/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
-});
 
 Route::prefix('transactions')->group(function () {
     Route::post('getTransaction', [TransactionController::class, 'getTransaction'])->name('transactions.getTransaction');
@@ -29,6 +22,21 @@ Route::prefix('customers')->group(function () {
     Route::post('store', [CustomerController::class, 'store'])->name('customers.store');
     Route::post('{customer}/update', [CustomerController::class, 'update'])->name('customers.update');
     Route::post('{customer}/destroy', [CustomerController::class, 'destroy'])->name('customers.destroy');
+});
+
+Route::prefix('products')->group(function () {
+    Route::post('getProduct', [ProductController::class, 'getProduct'])->name('products.getProduct');
+    Route::post('store', [ProductController::class, 'store'])->name('products.store');
+    Route::post('generateKeywords', [ProductController::class, 'generateKeywords'])->name('products.generateKeywords');
+    Route::post('{product}/update', [ProductController::class, 'update'])->name('products.update');
+    Route::post('{product}/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
+});
+
+Route::prefix('product_discounts')->group(function () {
+    Route::post('getDiscount', [ProductDiscountController::class, 'getDiscount'])->name('product_discounts.getDiscount');
+    Route::post('store', [ProductDiscountController::class, 'store'])->name('product_discounts.store');
+    Route::post('{product_discount}/update', [ProductDiscountController::class, 'update'])->name('product_discounts.update');
+    Route::post('{product_discount}/destroy', [ProductDiscountController::class, 'destroy'])->name('product_discounts.destroy');
 });
 
 Route::prefix('product_categories')->group(function () {

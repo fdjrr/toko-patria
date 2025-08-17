@@ -1,14 +1,24 @@
 <x-app-layout title="{{ $page_meta['title'] }}">
-    <table id="dg" class="easyui-datagrid" url="{{ route('customers.getCustomer') }}" toolbar="#toolbar"
-        pagination="true" rownumbers="true" fitColumns="true" idField="id" singleSelect="true" fit="true">
+    <table id="dg" class="easyui-datagrid" data-options="
+        url: '{{ route('customers.getCustomer') }}',
+        toolbar: '#toolbar',
+        pagination: true,
+        rownumbers: true,
+        fitColumns: true,
+        idField: 'id',
+        singleSelect: true,
+        fit: true,
+        multiSort: true
+    ">
         <thead>
             <tr>
-                <th field="code" width="50">Code</th>
-                <th field="name" width="50">Name</th>
-                <th field="phone_number" width="50">Phone Number</th>
-                <th field="address" width="50">Address</th>
-                <th field="province_name" width="50">Province</th>
-                <th field="city_name" width="50">City</th>
+                <th data-options="field:'code',sortable:true">Code</th>
+                <th data-options="field:'name',sortable:true">Name</th>
+                <th data-options="field:'phone_number'">Phone Number</th>
+                <th data-options="field:'address',formatter:strLimit">
+                    Address</th>
+                <th data-options="field:'province_name',sortable:true">Province</th>
+                <th data-options="field:'city_name',sortable:true">City</th>
             </tr>
         </thead>
     </table>
@@ -27,7 +37,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-window" style="width:400px" data-options="closed:true,footer:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:500px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"
@@ -70,8 +80,8 @@
                     label: 'Province:',
                     labelPosition: 'top',
                     columns: [[
-                        { field: 'code', title: 'Code', width: 50 },
-                        { field: 'name', title: 'Name', width: 50 },
+                        { field: 'code', title: 'Code' },
+                        { field: 'name', title: 'Name' },
                     ]],
                     onSelect: function (index, row) {
                         $('#city_id').combogrid('clear');
@@ -91,15 +101,19 @@
                     label: 'City:',
                     labelPosition: 'top',
                     columns: [[
-                        { field: 'province_code', title: 'Province Code', width: 50 },
-                        { field: 'code', title: 'Code', width: 50 },
-                        { field: 'name', title: 'Name', width: 50 },
+                        { field: 'province_code', title: 'Province Code' },
+                        { field: 'code', title: 'Code' },
+                        { field: 'name', title: 'Name' },
                     ]],
                     onBeforeLoad: function (param) {
                         param.province_id = $('#province_id').combogrid('getValue');
                     }
                 });
             });
+
+            function strLimit(value, row) {
+                return value ? value.substring(0, 50) + '...' : ''
+            }
 
             var url;
 

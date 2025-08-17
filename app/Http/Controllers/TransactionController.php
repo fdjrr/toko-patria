@@ -15,9 +15,21 @@ class TransactionController extends Controller
 {
     public function index()
     {
-        $channels = ['offline', 'online'];
-        $statuses = ['pending', 'paid', 'shipped', 'completed', 'cancelled'];
-        $payment_methods = ['cash', 'transfer'];
+        $channels = [
+            'offline' => 'Offline',
+            'online' => 'Online',
+        ];
+        $statuses = [
+            'pending' => 'Pending',
+            'paid' => 'Paid',
+            'shipped' => 'Shipped',
+            'completed' => 'Completed',
+            'cancelled' => 'Cancelled',
+        ];
+        $payment_methods = [
+            'cash' => 'Cash',
+            'transfer' => 'Transfer',
+        ];
 
         return view('pages.transactions.index', [
             'page_meta' => [
@@ -34,10 +46,33 @@ class TransactionController extends Controller
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
+        $sorts = $request->sort;
+        $orders = $request->order;
 
-        $transactions = Transaction::query()->filter([
-            'search' => $search,
-        ])->orderBy('code');
+        $transactions = Transaction::query()
+            ->with(['customer'])
+            ->leftJoin('customers as customer', 'transactions.customer_id', '=', 'customer.id')
+            ->select('transactions.*')
+            ->filter([
+                'search' => $search,
+            ]);
+
+        if ($sorts && $orders) {
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
+
+            foreach ($sortArr as $i => $sortField) {
+                $orderDir = $orderArr[$i] ?? 'asc';
+
+                if ($sortField === 'customer_name') {
+                    $transactions->orderBy('customer.name', $orderDir);
+                } else {
+                    $transactions->orderBy("transactions.$sortField", $orderDir);
+                }
+            }
+        } else {
+            $transactions->orderBy('transactions.code');
+        }
 
         $total = $transactions->count();
 
@@ -53,15 +88,16 @@ class TransactionController extends Controller
         $rows = collect($transactions)->map(fn ($transaction) => [
             'id' => $transaction->id,
             'code' => $transaction->code,
-            'shipment_no' => $transaction->shipment_no,
             'customer_id' => $transaction->customer_id,
             'customer_name' => $transaction->customer?->code.' - '.$transaction->customer?->name,
-            'channel' => $transaction->channel,
+            'shipment_no' => $transaction->shipment_no,
             'transaction_date' => $transaction->transaction_date,
+            'channel' => $transaction->channel,
             'status' => $transaction->status,
-            'total_discount' => $transaction->total_discount,
-            'total_amount' => $transaction->total_amount,
             'payment_method' => $transaction->payment_method,
+            'total_discount' => $transaction->total_discount,
+            'total_extra_disc' => $transaction->total_extra_disc,
+            'total_amount' => $transaction->total_amount,
             'notes' => $transaction->notes,
         ])->toArray();
 
@@ -83,6 +119,8 @@ class TransactionController extends Controller
                 'price' => $transaction_item->price,
                 'qty' => $transaction_item->qty,
                 'discount' => $transaction_item->discount,
+                'extra_disc' => $transaction_item->extra_disc,
+                'subtotal' => $transaction_item->subtotal,
             ])->toArray();
 
             return response()->json([
@@ -124,6 +162,7 @@ class TransactionController extends Controller
             $data = [];
             $now = now();
             $total_discount = 0;
+            $total_extra_disc = 0;
             $total_amount = 0;
             $productNotExists = [];
 
@@ -142,18 +181,24 @@ class TransactionController extends Controller
                 $product = $products->where('code', $product_code)->first();
                 if ($product) {
                     $qty = $item['qty'];
-                    $discount = $item['discount'] ?? 0;
+                    $extra_disc = $item['extra_disc'];
                     $subtotal = $product->price * $qty;
 
                     $product_discount = $product_discounts->where('product_id', $product->id)->first();
                     if ($product_discount) {
+                        $itemQty = $product_discount->min_purchase > 0 ? floor($qty / $product_discount->min_purchase) : $qty;
+
                         switch ($product_discount->discount_type) {
                             case 'percentage':
-                                $discount = $subtotal * ($product_discount->discount_value / 100);
+                                $defaultDiscount = $product->price * ($product_discount->discount_value / 100);
+
+                                $discount = $product_discount->is_multiple ? $defaultDiscount * $itemQty : $defaultDiscount;
                                 break;
 
                             case 'fixed':
-                                $discount = $subtotal - $product_discount->discount_value;
+                                $defaultDiscount = $product_discount->discount_value;
+
+                                $discount = $product_discount->is_multiple ? $defaultDiscount * $itemQty : $defaultDiscount;
                                 break;
 
                             default:
@@ -167,10 +212,12 @@ class TransactionController extends Controller
                         'price' => $product->price,
                         'qty' => $qty,
                         'discount' => $discount,
+                        'extra_disc' => $extra_disc,
                         'subtotal' => $subtotal,
                     ];
 
                     $total_discount += $discount;
+                    $total_extra_disc += $extra_disc;
                     $total_amount += $subtotal;
                 } else {
                     $productNotExists[] = $product_code;
@@ -185,7 +232,8 @@ class TransactionController extends Controller
 
             $transaction->update([
                 'total_discount' => $total_discount,
-                'total_amount' => $total_amount - $total_discount,
+                'total_extra_disc' => $total_extra_disc,
+                'total_amount' => $total_amount - $total_discount - $total_extra_disc,
             ]);
 
             DB::commit();
@@ -233,6 +281,7 @@ class TransactionController extends Controller
             $data = [];
             $now = now();
             $total_discount = 0;
+            $total_extra_disc = 0;
             $total_amount = 0;
             $productNotExists = [];
 
@@ -243,7 +292,7 @@ class TransactionController extends Controller
                 'product_codes' => $productCodes,
                 'start_date' => $now->format('Y-m-d'),
                 'end_date' => $now->format('Y-m-d'),
-            ])->get();
+            ])->isActive()->get();
 
             foreach ($items as $item) {
                 $product_code = $item['product_code'];
@@ -251,18 +300,24 @@ class TransactionController extends Controller
                 $product = $products->where('code', $product_code)->first();
                 if ($product) {
                     $qty = $item['qty'];
-                    $discount = $item['discount'] ?? 0;
+                    $extra_disc = $item['extra_disc'];
                     $subtotal = $product->price * $qty;
 
                     $product_discount = $product_discounts->where('product_id', $product->id)->first();
                     if ($product_discount) {
+                        $itemQty = $product_discount->min_purchase > 0 ? floor($qty / $product_discount->min_purchase) : $qty;
+
                         switch ($product_discount->discount_type) {
                             case 'percentage':
-                                $discount = $subtotal * ($product_discount->discount_value / 100);
+                                $defaultDiscount = $product->price * ($product_discount->discount_value / 100);
+
+                                $discount = $product_discount->is_multiple ? $defaultDiscount * $itemQty : $defaultDiscount;
                                 break;
 
                             case 'fixed':
-                                $discount = $subtotal - $product_discount->discount_value;
+                                $defaultDiscount = $product_discount->discount_value;
+
+                                $discount = $product_discount->is_multiple ? $defaultDiscount * $itemQty : $defaultDiscount;
                                 break;
 
                             default:
@@ -276,10 +331,12 @@ class TransactionController extends Controller
                         'price' => $product->price,
                         'qty' => $qty,
                         'discount' => $discount,
+                        'extra_disc' => $extra_disc,
                         'subtotal' => $subtotal,
                     ];
 
                     $total_discount += $discount;
+                    $total_extra_disc += $extra_disc;
                     $total_amount += $subtotal;
                 } else {
                     $productNotExists[] = $product_code;
@@ -294,7 +351,8 @@ class TransactionController extends Controller
 
             $transaction->update([
                 'total_discount' => $total_discount,
-                'total_amount' => $total_amount - $total_discount,
+                'total_extra_disc' => $total_extra_disc,
+                'total_amount' => $total_amount - $total_discount - $total_extra_disc,
             ]);
 
             DB::commit();

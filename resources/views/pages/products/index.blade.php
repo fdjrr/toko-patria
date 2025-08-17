@@ -7,19 +7,17 @@
         fitColumns: true,
         singleSelect: true,
         fit: true,
-        remoteSort: false,
         multiSort: true
     ">
         <thead>
             <tr>
-                <th data-options="field:'code', width:10,sortable:true">Code</th>
-                <th data-options="field:'name', width:10,sortable:true">Name</th>
-                <th data-options="field:'part_code', width:10,sortable:true">Part Code</th>
-                <th data-options="field:'category_name', width:10,sortable:true">Category</th>
-                <th data-options="field:'brand_name', width:10,sortable:true">Brand</th>
-                <th data-options="field:'price', width:10,sortable:true,sorter:numSorter">Price</th>
-                <th data-options="field:'stock', width:10,sortable:true,sorter:numSorter">Stock</th>
-                <th data-options="field:'description', width:10">Description</th>
+                <th data-options="field:'code',sortable:true">Code</th>
+                <th data-options="field:'name',sortable:true">Name</th>
+                <th data-options="field:'part_code',sortable:true">Part Code</th>
+                <th data-options="field:'category_name',sortable:true">Category</th>
+                <th data-options="field:'brand_name',sortable:true">Brand</th>
+                <th data-options="field:'price',sortable:true,sorter:numSorter">Price</th>
+                <th data-options="field:'stock',sortable:true,sorter:numSorter">Stock</th>
             </tr>
         </thead>
     </table>
@@ -103,8 +101,8 @@
                     label: 'Category:',
                     labelPosition: 'top',
                     columns: [[
-                        { field: 'parent_name', title: 'Parent', width: 50 },
-                        { field: 'name', title: 'Name', width: 50 },
+                        { field: 'parent_name', title: 'Parent' },
+                        { field: 'name', title: 'Name' },
                     ]],
                 });
 

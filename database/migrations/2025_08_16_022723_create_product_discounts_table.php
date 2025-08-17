@@ -18,9 +18,11 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->enum('discount_type', ['percentage', 'fixed'])->default('percentage');
             $table->decimal('discount_value', 18, 2)->default(0);
-            $table->decimal('min_purchase', 18, 2)->default(0);
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('end_date')->nullable();
+            $table->unsignedBigInteger('min_purchase')->default(0);
+            $table->boolean('is_multiple')->default(false);
+            $table->text('description')->nullable();
+            $table->date('start_date')->nullable();
+            $table->date('end_date')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();

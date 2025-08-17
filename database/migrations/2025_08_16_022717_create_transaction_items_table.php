@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('price', 18, 2)->default(0);
             $table->unsignedBigInteger('qty')->default(0);
             $table->decimal('discount', 18, 2)->default(0);
+            $table->decimal('extra_disc', 18, 2)->default(0);
             $table->decimal('subtotal', 18, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();

@@ -23,16 +23,39 @@ class ProductController extends Controller
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
+        $sorts = $request->sort;
+        $orders = $request->order;
 
         $products = Product::query()
             ->with([
                 'product_category',
                 'product_brand',
             ])
+            ->leftJoin('product_categories as product_category', 'products.category_id', '=', 'product_category.id')
+            ->leftJoin('product_brands as product_brand', 'products.category_id', '=', 'product_brand.id')
+            ->select('products.*')
             ->filter([
                 'search' => $search,
-            ])
-            ->orderBy('code');
+            ]);
+
+        if ($sorts && $orders) {
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
+
+            foreach ($sortArr as $i => $sortField) {
+                $orderDir = $orderArr[$i] ?? 'asc';
+
+                if ($sortField === 'category_name') {
+                    $products->orderBy('product_category.name', $orderDir);
+                } elseif ($sortField === 'brand_name') {
+                    $products->orderBy('product_brand.name', $orderDir);
+                } else {
+                    $products->orderBy("products.$sortField", $orderDir);
+                }
+            }
+        } else {
+            $products->orderBy('products.code');
+        }
 
         $total = $products->count();
 

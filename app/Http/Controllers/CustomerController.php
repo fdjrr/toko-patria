@@ -22,10 +22,39 @@ class CustomerController extends Controller
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
+        $sorts = $request->sort;
+        $orders = $request->order;
 
-        $customers = Customer::query()->filter([
-            'search' => $search,
-        ])->orderBy('name');
+        $customers = Customer::query()
+            ->with([
+                'province',
+                'city',
+            ])
+            ->leftJoin('indonesia_provinces as province', 'customers.province_id', '=', 'province.id')
+            ->leftJoin('indonesia_cities as city', 'customers.city_id', '=', 'city.id')
+            ->select('customers.*')
+            ->filter([
+                'search' => $search,
+            ]);
+
+        if ($sorts && $orders) {
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
+
+            foreach ($sortArr as $i => $sortField) {
+                $orderDir = $orderArr[$i] ?? 'asc';
+
+                if ($sortField === 'province_name') {
+                    $customers->orderBy('province.name', $orderDir);
+                } elseif ($sortField === 'city_name') {
+                    $customers->orderBy('city.name', $orderDir);
+                } else {
+                    $customers->orderBy("customers.$sortField", $orderDir);
+                }
+            }
+        } else {
+            $customers->orderBy('customers.code');
+        }
 
         $total = $customers->count();
 

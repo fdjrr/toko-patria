@@ -8,12 +8,13 @@ class CustomerObserver
 {
     public function creating(Customer $customer)
     {
-        $lastCode = Customer::withTrashed()
+        $lastCustomer = Customer::withTrashed()
+            ->withTrashed()
             ->orderBy('id', 'desc')
-            ->value('code');
+            ->first();
 
-        if ($lastCode) {
-            $lastNumber = (int) str_replace('CUST-', '', $lastCode);
+        if ($lastCustomer) {
+            $lastNumber = (int) str_replace('CUST-', '', $lastCustomer->code);
             $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;

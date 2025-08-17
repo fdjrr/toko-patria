@@ -1,9 +1,18 @@
 <x-app-layout title="{{ $page_meta['title'] }}">
-    <table id="dg" class="easyui-datagrid" url="{{ route('product_brands.getBrand') }}" toolbar="#toolbar"
-        pagination="true" rownumbers="true" fitColumns="true" idField="id" singleSelect="true" fit="true">
+    <table id="dg" class="easyui-datagrid" data-options="
+        url: '{{ route('product_brands.getBrand') }}',
+        toolbar: '#toolbar',
+        pagination: true,
+        rownumbers: true,
+        fitColumns: true,
+        idField: 'id',
+        singleSelect: true,
+        fit: true,
+        multiSort: true
+    ">
         <thead>
             <tr>
-                <th field="name" width="50">Name</th>
+                <th data-options="field:'name',sortable:true">Name</th>
             </tr>
         </thead>
     </table>
@@ -21,7 +30,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-window" style="width:400px" data-options="closed:true,footer:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:500px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"

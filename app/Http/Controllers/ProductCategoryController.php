@@ -22,13 +22,33 @@ class ProductCategoryController extends Controller
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
+        $sorts = $request->sort;
+        $orders = $request->order;
 
         $product_categories = ProductCategory::query()
             ->with(['parent'])
+            ->leftJoin('product_categories as parent', 'product_categories.parent_id', '=', 'parent.id')
+            ->select('product_categories.*')
             ->filter([
                 'search' => $search,
-            ])
-            ->orderBy('name');
+            ]);
+
+        if ($sorts && $orders) {
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
+
+            foreach ($sortArr as $i => $sortField) {
+                $orderDir = $orderArr[$i] ?? 'asc';
+
+                if ($sortField === 'parent_name') {
+                    $product_categories->orderBy('parent.name', $orderDir);
+                } else {
+                    $product_categories->orderBy("product_categories.$sortField", $orderDir);
+                }
+            }
+        } else {
+            $product_categories->orderBy('product_categories.name');
+        }
 
         $total = $product_categories->count();
 

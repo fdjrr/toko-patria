@@ -22,10 +22,24 @@ class ProductBrandController extends Controller
         $search = $request->q;
         $page = $request->page;
         $rows = $request->rows;
+        $sorts = $request->sorts;
+        $orders = $request->order;
 
         $product_brands = ProductBrand::query()->filter([
             'search' => $search,
-        ])->orderBy('name');
+        ]);
+
+        if ($sorts && $orders) {
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
+
+            foreach ($sortArr as $i => $sortField) {
+                $orderDir = $orderArr[$i] ?? 'asc';
+                $product_brands->orderBy($sortField, $orderDir);
+            }
+        } else {
+            $product_brands->orderBy('name');
+        }
 
         $total = $product_brands->count();
 

@@ -17,11 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('customer_id')->constrained('customers')->cascadeOnDelete();
             $table->string('code');
-            $table->string('shipment_no');
+            $table->string('shipment_no')->nullable();
             $table->enum('channel', ['offline', 'online'])->default('offline');
             $table->date('transaction_date');
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed', 'cancelled'])->default('pending');
             $table->decimal('total_discount', 18, 2)->default(0);
+            $table->decimal('total_extra_disc', 18, 2)->default(0);
             $table->decimal('total_amount', 18, 2)->default(0);
             $table->enum('payment_method', ['cash', 'transfer'])->default('cash');
             $table->text('notes')->nullable();

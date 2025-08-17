@@ -7,21 +7,22 @@
         fitColumns: true,
         idField: 'id',
         singleSelect: true,
+        fit: true,
         remoteSort: false,
-        multiSort: true,
-        fit: true
+        multiSort: true
     ">
         <thead>
             <tr>
-                <th data-options="field:'code', width:50, sortable:true">Code</th>
-                <th data-options="field:'shipment_no', width:50, sortable:true">Shipment No</th>
-                <th data-options="field:'customer_name', width:50, sortable:true">Customer</th>
-                <th data-options="field:'transaction_date', width:50, sortable:true">Trx Date</th>
-                <th data-options="field:'channel', width:50, sortable:true">Channel</th>
-                <th data-options="field:'status', width:50, sortable:true">Status</th>
-                <th data-options="field:'payment_method', width:50, sortable:true">Payment Method</th>
-                <th data-options="field:'total_discount', width:50, sortable:true, sorter:numSorter">Disc</th>
-                <th data-options="field:'total_amount', width:50, sortable:true, sorter:numSorter">Total</th>
+                <th data-options="field:'code',sortable:true">Code</th>
+                <th data-options="field:'customer_name',sortable:true">Customer</th>
+                <th data-options="field:'shipment_no',sortable:true">Shipment No</th>
+                <th data-options="field:'transaction_date',sortable:true">Trx Date</th>
+                <th data-options="field:'channel',sortable:true">Channel</th>
+                <th data-options="field:'status',sortable:true">Status</th>
+                <th data-options="field:'payment_method',sortable:true">Payment Method</th>
+                <th data-options="field:'total_discount',sortable:true,sorter:numSorter">T. Disc</th>
+                <th data-options="field:'total_extra_disc',sortable:true,sorter:numSorter">T. Extra Disc</th>
+                <th data-options="field:'total_amount',sortable:true,sorter:numSorter">T. Amount</th>
             </tr>
         </thead>
     </table>
@@ -60,8 +61,8 @@
                 <div style="margin-bottom:10px">
                     <select class="easyui-combobox" name="channel" label="Channel:" labelPosition="top"
                         style="width:100%;">
-                        @forelse ($channels as $channel)
-                            <option value="{{$channel}}">{{$channel}}</option>
+                        @forelse ($channels as $key => $channel)
+                            <option value="{{$key}}">{{$channel}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -69,8 +70,8 @@
                 <div style="margin-bottom:10px">
                     <select class="easyui-combobox" name="status" label="Status:" labelPosition="top"
                         style="width:100%;">
-                        @forelse ($statuses as $status)
-                            <option value="{{$status}}">{{$status}}</option>
+                        @forelse ($statuses as $key => $status)
+                            <option value="{{$key}}">{{$status}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -78,8 +79,8 @@
                 <div style="margin-bottom:10px">
                     <select class="easyui-combobox" name="payment_method" label="Payment Method:" labelPosition="top"
                         style="width:100%;">
-                        @forelse ($payment_methods as $payment_method)
-                            <option value="{{$payment_method}}">{{$payment_method}}</option>
+                        @forelse ($payment_methods as $key => $payment_method)
+                            <option value="{{$key}}">{{$payment_method}}</option>
                         @empty
                         @endforelse
                     </select>
@@ -115,10 +116,10 @@
                     label: 'Customer:',
                     labelPosition: 'top',
                     columns: [[
-                        { field: 'code', title: 'Code', width: 50 },
-                        { field: 'name', title: 'Name', width: 50 },
-                        { field: 'phone_number', title: 'Phone Number', width: 50 },
-                        { field: 'address', title: 'Address', width: 50 },
+                        { field: 'code', title: 'Code' },
+                        { field: 'name', title: 'Name' },
+                        { field: 'phone_number', title: 'Phone Number' },
+                        { field: 'address', title: 'Address' },
                     ]],
                 });
             });
@@ -151,8 +152,6 @@
                         .dialog("setTitle", "Edit Transaction");
 
                     $("#fm").form("load", row);
-
-                    console.log(row)
 
                     $('#customer_id').combogrid('setValue', row.customer_id);
                     $('#customer_id').combogrid('setText', row.customer_name);
