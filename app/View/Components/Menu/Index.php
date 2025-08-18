@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class TitleBar extends Component
+class Index extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class TitleBar extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.title-bar');
+        return view('components.menu.index');
     }
 }

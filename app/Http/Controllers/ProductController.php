@@ -5,15 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Gemini\Laravel\Facades\Gemini;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Throwable;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        return view('pages.products.index', [
-            'page_meta' => [
-                'title' => 'Products',
+        return view("pages.products.index", [
+            "page_meta" => [
+                "title" => "Products",
             ],
         ]);
     }
@@ -27,34 +28,31 @@ class ProductController extends Controller
         $orders = $request->order;
 
         $products = Product::query()
-            ->with([
-                'product_category',
-                'product_brand',
-            ])
-            ->leftJoin('product_categories as product_category', 'products.category_id', '=', 'product_category.id')
-            ->leftJoin('product_brands as product_brand', 'products.category_id', '=', 'product_brand.id')
-            ->select('products.*')
+            ->with(["product_category", "product_brand"])
+            ->leftJoin("product_categories as product_category", "products.category_id", "=", "product_category.id")
+            ->leftJoin("product_brands as product_brand", "products.category_id", "=", "product_brand.id")
+            ->select("products.*")
             ->filter([
-                'search' => $search,
+                "search" => $search,
             ]);
 
         if ($sorts && $orders) {
-            $sortArr = explode(',', $sorts);
-            $orderArr = explode(',', $orders);
+            $sortArr = explode(",", $sorts);
+            $orderArr = explode(",", $orders);
 
             foreach ($sortArr as $i => $sortField) {
-                $orderDir = $orderArr[$i] ?? 'asc';
+                $orderDir = $orderArr[$i] ?? "asc";
 
-                if ($sortField === 'category_name') {
-                    $products->orderBy('product_category.name', $orderDir);
-                } elseif ($sortField === 'brand_name') {
-                    $products->orderBy('product_brand.name', $orderDir);
+                if ($sortField === "category_name") {
+                    $products->orderBy("product_category.name", $orderDir);
+                } elseif ($sortField === "brand_name") {
+                    $products->orderBy("product_brand.name", $orderDir);
                 } else {
                     $products->orderBy("products.$sortField", $orderDir);
                 }
             }
         } else {
-            $products->orderBy('products.code');
+            $products->orderBy("products.code");
         }
 
         $total = $products->count();
@@ -68,24 +66,26 @@ class ProductController extends Controller
             $products = $products->get();
         }
 
-        $rows = collect($products)->map(fn ($product) => [
-            'id' => $product->id,
-            'code' => $product->code,
-            'name' => $product->name,
-            'part_code' => $product->part_code,
-            'category_id' => $product->category_id,
-            'category_name' => $product->product_category?->name,
-            'brand_id' => $product->brand_id,
-            'brand_name' => $product->product_brand?->name,
-            'price' => $product->price,
-            'stock' => $product->stock,
-            'keywords' => $product->keywords,
-            'description' => $product->description,
-        ])->toArray();
+        $rows = collect($products)
+            ->map(
+                fn($product) => [
+                    "id" => $product->id,
+                    "code" => $product->code,
+                    "name" => $product->name,
+                    "part_code" => $product->part_code,
+                    "category_id" => $product->category_id,
+                    "category_name" => $product->product_category?->name,
+                    "brand_id" => $product->brand_id,
+                    "brand_name" => $product->product_brand?->name,
+                    "keywords" => $product->keywords,
+                    "description" => $product->description,
+                ],
+            )
+            ->toArray();
 
         return response()->json([
-            'rows' => $rows,
-            'total' => $total,
+            "rows" => $rows,
+            "total" => $total,
         ]);
     }
 
@@ -113,22 +113,18 @@ keyword1,keyword2,keyword3,keyword4
         ";
 
         try {
-            $result = Gemini::generativeModel('gemini-2.5-flash')
-                ->generateContent([
-                    $system,
-                    $name,
-                    $description,
-                ])
+            $result = Gemini::generativeModel("gemini-2.5-flash")
+                ->generateContent([$system, $name, $description])
                 ->text();
 
             return response()->json([
-                'success' => true,
-                'data' => $result,
+                "success" => true,
+                "data" => $result,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
+                "success" => false,
+                "message" => $e->getMessage(),
             ]);
         }
     }
@@ -136,26 +132,24 @@ keyword1,keyword2,keyword3,keyword4
     public function store(Request $request)
     {
         try {
-            $product = Product::create([
-                'code' => $request->code,
-                'name' => $request->name,
-                'part_code' => $request->part_code,
-                'category_id' => $request->category_id,
-                'brand_id' => $request->brand_id,
-                'price' => $request->price,
-                'stock' => $request->stock,
-                'keywords' => $request->keywords,
-                'description' => $request->description,
+            $product = Product::query()->create([
+                "code" => Str::upper($request->code),
+                "name" => Str::upper($request->name),
+                "part_code" => Str::upper($request->part_code),
+                "category_id" => $request->category_id,
+                "brand_id" => $request->brand_id,
+                "keywords" => $request->keywords,
+                "description" => $request->description,
             ]);
 
             return response()->json([
-                'success' => true,
-                'data' => $product,
+                "success" => true,
+                "data" => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
+                "success" => false,
+                "message" => $e->getMessage(),
             ]);
         }
     }
@@ -164,25 +158,23 @@ keyword1,keyword2,keyword3,keyword4
     {
         try {
             $product->update([
-                'code' => $request->code,
-                'name' => $request->name,
-                'part_code' => $request->part_code,
-                'category_id' => $request->category_id,
-                'brand_id' => $request->brand_id,
-                'price' => $request->price,
-                'stock' => $request->stock,
-                'keywords' => $request->keywords,
-                'description' => $request->description,
+                "code" => Str::upper($request->code),
+                "name" => Str::upper($request->name),
+                "part_code" => Str::upper($request->part_code),
+                "category_id" => $request->category_id,
+                "brand_id" => $request->brand_id,
+                "keywords" => $request->keywords,
+                "description" => $request->description,
             ]);
 
             return response()->json([
-                'success' => true,
-                'data' => $product,
+                "success" => true,
+                "data" => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
+                "success" => false,
+                "message" => $e->getMessage(),
             ]);
         }
     }
@@ -193,13 +185,13 @@ keyword1,keyword2,keyword3,keyword4
             $product->delete();
 
             return response()->json([
-                'success' => true,
-                'data' => $product,
+                "success" => true,
+                "data" => $product,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
+                "success" => false,
+                "message" => $e->getMessage(),
             ]);
         }
     }

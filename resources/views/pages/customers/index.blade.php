@@ -15,8 +15,7 @@
                 <th data-options="field:'code',sortable:true">Code</th>
                 <th data-options="field:'name',sortable:true">Name</th>
                 <th data-options="field:'phone_number'">Phone Number</th>
-                <th data-options="field:'address',formatter:strLimit">
-                    Address</th>
+                <th data-options="field:'address',formatter:strLimit">Address</th>
                 <th data-options="field:'province_name',sortable:true">Province</th>
                 <th data-options="field:'city_name',sortable:true">City</th>
             </tr>
@@ -112,7 +111,7 @@
             });
 
             function strLimit(value, row) {
-                return value ? value.substring(0, 50) + '...' : ''
+                return value.length > 50 ? value.substring(0, 50) + '...' : value;
             }
 
             var url;

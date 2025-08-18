@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ProductCategory;
+use App\Models\Warehouse;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Throwable;
 
-class ProductCategoryController extends Controller
+class WarehouseController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        return view("pages.product_categories.index", [
+        return view("pages.warehouses.index", [
             "page_meta" => [
-                "title" => "Product Category",
+                "title" => "Warehouses",
             ],
         ]);
     }
 
-    public function getCategory(Request $request)
+    public function getWarehouse(Request $request): JsonResponse
     {
         $search = $request->q;
         $page = $request->page;
@@ -26,13 +28,9 @@ class ProductCategoryController extends Controller
         $sorts = $request->sort;
         $orders = $request->order;
 
-        $product_categories = ProductCategory::query()
-            ->with(["parent"])
-            ->leftJoin("product_categories as parent", "product_categories.parent_id", "=", "parent.id")
-            ->select("product_categories.*")
-            ->filter([
-                "search" => $search,
-            ]);
+        $warehouses = Warehouse::query()->filter([
+            "search" => $search,
+        ]);
 
         if ($sorts && $orders) {
             $sortArr = explode(",", $sorts);
@@ -40,35 +38,30 @@ class ProductCategoryController extends Controller
 
             foreach ($sortArr as $i => $sortField) {
                 $orderDir = $orderArr[$i] ?? "asc";
-
-                if ($sortField === "parent_name") {
-                    $product_categories->orderBy("parent.name", $orderDir);
-                } else {
-                    $product_categories->orderBy("product_categories.$sortField", $orderDir);
-                }
+                $warehouses->orderBy($sortField, $orderDir);
             }
         } else {
-            $product_categories->orderBy("product_categories.name");
+            $warehouses->orderBy("code");
         }
 
-        $total = $product_categories->count();
+        $total = $warehouses->count();
 
         if ($page && $rows) {
-            $product_categories = $product_categories
+            $warehouses = $warehouses
                 ->limit($rows)
                 ->offset(($page - 1) * $rows)
                 ->get();
         } else {
-            $product_categories = $product_categories->get();
+            $warehouses = $warehouses->get();
         }
 
-        $rows = collect($product_categories)
+        $rows = collect($warehouses)
             ->map(
-                fn($product_category) => [
-                    "id" => $product_category->id,
-                    "parent_id" => $product_category->parent_id,
-                    "parent_name" => $product_category->parent?->name,
-                    "name" => $product_category->name,
+                fn($warehouse) => [
+                    "id" => $warehouse->id,
+                    "code" => $warehouse->code,
+                    "name" => $warehouse->name,
+                    "address" => $warehouse->address,
                 ],
             )
             ->toArray();
@@ -79,17 +72,17 @@ class ProductCategoryController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         try {
-            $product_category = ProductCategory::query()->create([
-                "parent_id" => $request->parent_id,
+            $warehouse = Warehouse::query()->create([
                 "name" => Str::upper($request->name),
+                "address" => Str::upper($request->address),
             ]);
 
             return response()->json([
                 "success" => true,
-                "data" => $product_category,
+                "data" => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([
@@ -99,17 +92,17 @@ class ProductCategoryController extends Controller
         }
     }
 
-    public function update(Request $request, ProductCategory $product_category)
+    public function update(Request $request, Warehouse $warehouse): JsonResponse
     {
         try {
-            $product_category->update([
-                "parent_id" => $request->parent_id,
+            $warehouse->update([
                 "name" => Str::upper($request->name),
+                "address" => Str::upper($request->address),
             ]);
 
             return response()->json([
                 "success" => true,
-                "data" => $product_category,
+                "data" => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([
@@ -119,14 +112,14 @@ class ProductCategoryController extends Controller
         }
     }
 
-    public function destroy(ProductCategory $product_category)
+    public function destroy(Warehouse $warehouse): JsonResponse
     {
         try {
-            $product_category->delete();
+            $warehouse->delete();
 
             return response()->json([
                 "success" => true,
-                "data" => $product_category,
+                "data" => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([

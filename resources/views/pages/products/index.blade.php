@@ -16,8 +16,6 @@
                 <th data-options="field:'part_code',sortable:true">Part Code</th>
                 <th data-options="field:'category_name',sortable:true">Category</th>
                 <th data-options="field:'brand_name',sortable:true">Brand</th>
-                <th data-options="field:'price',sortable:true,sorter:numSorter">Price</th>
-                <th data-options="field:'stock',sortable:true,sorter:numSorter">Stock</th>
             </tr>
         </thead>
     </table>
@@ -34,7 +32,7 @@
         </a>
     </div>
 
-    <div id="dlg" class="easyui-dialog" style="width:600px" data-options="closed:true,footer:'#dlg-buttons'">
+    <div id="dlg" class="easyui-window" style="width:600px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom:10px">
                 <input name="name" class="easyui-textbox" required="true" label="Name:"
@@ -56,16 +54,6 @@
                 </div>
                 <div style="margin-bottom:10px">
                     <input name="brand_id" id="brand_id" required="true" style="width:100%" />
-                </div>
-            </div>
-            <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
-                <div style="margin-bottom:10px">
-                    <input name="price" class="easyui-textbox" required="true" label="Price:"
-                        data-options="labelPosition: 'top'" style="width:100%" />
-                </div>
-                <div style="margin-bottom:10px">
-                    <input name="stock" class="easyui-textbox" required="true" label="Stock:"
-                        data-options="labelPosition: 'top'" style="width:100%" />
                 </div>
             </div>
             <div style="margin-bottom:10px">
@@ -155,12 +143,6 @@
                     })
                 })
             })
-
-            function numSorter(a, b) {
-                a = parseFloat(a);
-                b = parseFloat(b);
-                return a == b ? 0 : (a > b ? 1 : -1);
-            }
 
             var url;
 

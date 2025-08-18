@@ -7,6 +7,7 @@ use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('transactions')->group(function () {
@@ -22,6 +23,13 @@ Route::prefix('customers')->group(function () {
     Route::post('store', [CustomerController::class, 'store'])->name('customers.store');
     Route::post('{customer}/update', [CustomerController::class, 'update'])->name('customers.update');
     Route::post('{customer}/destroy', [CustomerController::class, 'destroy'])->name('customers.destroy');
+});
+
+Route::prefix('warehouses')->group(function () {
+    Route::post('getWarehouse', [WarehouseController::class, 'getWarehouse'])->name('warehouses.getWarehouse');
+    Route::post('store', [WarehouseController::class, 'store'])->name('warehouses.store');
+    Route::post('{warehouse}/update', [WarehouseController::class, 'update'])->name('warehouses.update');
+    Route::post('{warehouse}/destroy', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
 });
 
 Route::prefix('products')->group(function () {

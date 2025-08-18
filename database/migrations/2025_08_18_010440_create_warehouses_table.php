@@ -12,15 +12,11 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::query()->create("transaction_items", function (Blueprint $table) {
+        Schema::query()->create("warehouses", function (Blueprint $table) {
             $table->id();
-            $table->foreignId("transaction_id")->constrained("transactions")->cascadeOnDelete();
-            $table->foreignId("product_id")->constrained("products")->cascadeOnDelete();
-            $table->decimal("price", 18, 2)->default(0);
-            $table->unsignedBigInteger("qty")->default(0);
-            $table->decimal("discount", 18, 2)->default(0);
-            $table->decimal("extra_disc", 18, 2)->default(0);
-            $table->decimal("subtotal", 18, 2)->default(0);
+            $table->string("code")->index();
+            $table->string("name");
+            $table->string("address")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -35,7 +31,7 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists("transaction_items");
+        Schema::dropIfExists("warehouses");
 
         Schema::enableForeignKeyConstraints();
     }

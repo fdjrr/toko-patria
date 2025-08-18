@@ -12,17 +12,13 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::query()->create("product_discounts", function (Blueprint $table) {
+        Schema::query()->create("stock_batches", function (Blueprint $table) {
             $table->id();
             $table->foreignId("product_id")->constrained("products")->cascadeOnDelete();
-            $table->enum("discount_type", ["percentage", "fixed"])->default("percentage");
-            $table->decimal("discount_value", 18, 2)->default(0);
-            $table->unsignedBigInteger("min_purchase")->default(0);
-            $table->boolean("is_multiple")->default(false);
-            $table->text("description")->nullable();
-            $table->date("start_date")->nullable();
-            $table->date("end_date")->nullable();
-            $table->boolean("is_active")->default(true);
+            $table->foreignId("warehouse_id")->constrained("warehouses")->cascadeOnDelete();
+            $table->foreignId("qty")->default(0);
+            $table->decimal("price", 18, 2)->default(0);
+            $table->decimal("total_price", 18, 2)->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -37,7 +33,7 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists("product_discounts");
+        Schema::dropIfExists("stock_batches");
 
         Schema::enableForeignKeyConstraints();
     }

@@ -16,12 +16,12 @@
 
 <body>
     <div id="cc" class="easyui-layout" data-options="fit:true">
-        <x-menu />
+        <x-menu.index />
         <div data-options="region:'center',title:'{{ $title }}'">
             {{ $slot }}
         </div>
     </div>
-    <x-title-bar />
+    <x-menu.item />
 
     <script type="text/javascript" src="{{ asset('jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('jquery.easyui.min.js') }}"></script>

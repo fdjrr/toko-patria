@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -50,10 +51,29 @@ class Product extends Model
     }
 
     /**
-     * Get all of the product_reviews for the Product
+     * Get all of the stocks for the Product
      */
-    public function product_reviews(): HasMany
+    public function stocks(): HasMany
+    {
+        return $this->hasMany(WarehouseStock::class, 'product_id', 'id');
+    }
+
+    /**
+     * Get all of the reviews for the Product
+     */
+    public function reviews(): HasMany
     {
         return $this->hasMany(ProductReview::class, 'product_id', 'id');
+    }
+
+    /**
+     * The warehouses that belong to the Product
+     */
+    public function warehouses(): BelongsToMany
+    {
+        return $this
+            ->belongsToMany(Warehouse::class, 'product_stocks')
+            ->withPivot('qty')
+            ->withTimestamps();
     }
 }
