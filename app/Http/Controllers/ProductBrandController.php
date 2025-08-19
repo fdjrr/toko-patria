@@ -11,9 +11,9 @@ class ProductBrandController extends Controller
 {
     public function index()
     {
-        return view("pages.product_brands.index", [
-            "page_meta" => [
-                "title" => "Product Brand",
+        return view('pages.product-brand.index', [
+            'page_meta' => [
+                'title' => 'Product Brand',
             ],
         ]);
     }
@@ -27,19 +27,19 @@ class ProductBrandController extends Controller
         $orders = $request->order;
 
         $product_brands = ProductBrand::query()->filter([
-            "search" => $search,
+            'search' => $search,
         ]);
 
         if ($sorts && $orders) {
-            $sortArr = explode(",", $sorts);
-            $orderArr = explode(",", $orders);
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
 
             foreach ($sortArr as $i => $sortField) {
-                $orderDir = $orderArr[$i] ?? "asc";
+                $orderDir = $orderArr[$i] ?? 'asc';
                 $product_brands->orderBy($sortField, $orderDir);
             }
         } else {
-            $product_brands->orderBy("name");
+            $product_brands->orderBy('name');
         }
 
         $total = $product_brands->count();
@@ -55,16 +55,16 @@ class ProductBrandController extends Controller
 
         $rows = collect($product_brands)
             ->map(
-                fn($product_brand) => [
-                    "id" => $product_brand->id,
-                    "name" => $product_brand->name,
+                fn ($product_brand) => [
+                    'id' => $product_brand->id,
+                    'name' => $product_brand->name,
                 ],
             )
             ->toArray();
 
         return response()->json([
-            "rows" => $rows,
-            "total" => $total,
+            'rows' => $rows,
+            'total' => $total,
         ]);
     }
 
@@ -72,17 +72,17 @@ class ProductBrandController extends Controller
     {
         try {
             $product_brand = ProductBrand::query()->create([
-                "name" => Str::upper($request->name),
+                'name' => Str::upper($request->name),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $product_brand,
+                'success' => true,
+                'data' => $product_brand,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -91,17 +91,17 @@ class ProductBrandController extends Controller
     {
         try {
             $product_brand->update([
-                "name" => Str::upper($request->name),
+                'name' => Str::upper($request->name),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $product_brand,
+                'success' => true,
+                'data' => $product_brand,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -112,13 +112,13 @@ class ProductBrandController extends Controller
             $product_brand->delete();
 
             return response()->json([
-                "success" => true,
-                "data" => $product_brand,
+                'success' => true,
+                'data' => $product_brand,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }

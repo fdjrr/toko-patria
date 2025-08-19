@@ -11,9 +11,9 @@ class ProductCategoryController extends Controller
 {
     public function index()
     {
-        return view("pages.product_categories.index", [
-            "page_meta" => [
-                "title" => "Product Category",
+        return view('pages.product-category.index', [
+            'page_meta' => [
+                'title' => 'Product Category',
             ],
         ]);
     }
@@ -27,28 +27,28 @@ class ProductCategoryController extends Controller
         $orders = $request->order;
 
         $product_categories = ProductCategory::query()
-            ->with(["parent"])
-            ->leftJoin("product_categories as parent", "product_categories.parent_id", "=", "parent.id")
-            ->select("product_categories.*")
+            ->with(['parent'])
+            ->leftJoin('product_categories as parent', 'product_categories.parent_id', '=', 'parent.id')
+            ->select('product_categories.*')
             ->filter([
-                "search" => $search,
+                'search' => $search,
             ]);
 
         if ($sorts && $orders) {
-            $sortArr = explode(",", $sorts);
-            $orderArr = explode(",", $orders);
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
 
             foreach ($sortArr as $i => $sortField) {
-                $orderDir = $orderArr[$i] ?? "asc";
+                $orderDir = $orderArr[$i] ?? 'asc';
 
-                if ($sortField === "parent_name") {
-                    $product_categories->orderBy("parent.name", $orderDir);
+                if ($sortField === 'parent_name') {
+                    $product_categories->orderBy('parent.name', $orderDir);
                 } else {
                     $product_categories->orderBy("product_categories.$sortField", $orderDir);
                 }
             }
         } else {
-            $product_categories->orderBy("product_categories.name");
+            $product_categories->orderBy('product_categories.name');
         }
 
         $total = $product_categories->count();
@@ -64,18 +64,18 @@ class ProductCategoryController extends Controller
 
         $rows = collect($product_categories)
             ->map(
-                fn($product_category) => [
-                    "id" => $product_category->id,
-                    "parent_id" => $product_category->parent_id,
-                    "parent_name" => $product_category->parent?->name,
-                    "name" => $product_category->name,
+                fn ($product_category) => [
+                    'id' => $product_category->id,
+                    'parent_id' => $product_category->parent_id,
+                    'parent_name' => $product_category->parent?->name,
+                    'name' => $product_category->name,
                 ],
             )
             ->toArray();
 
         return response()->json([
-            "rows" => $rows,
-            "total" => $total,
+            'rows' => $rows,
+            'total' => $total,
         ]);
     }
 
@@ -83,18 +83,18 @@ class ProductCategoryController extends Controller
     {
         try {
             $product_category = ProductCategory::query()->create([
-                "parent_id" => $request->parent_id,
-                "name" => Str::upper($request->name),
+                'parent_id' => $request->parent_id,
+                'name' => Str::upper($request->name),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $product_category,
+                'success' => true,
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -103,18 +103,18 @@ class ProductCategoryController extends Controller
     {
         try {
             $product_category->update([
-                "parent_id" => $request->parent_id,
-                "name" => Str::upper($request->name),
+                'parent_id' => $request->parent_id,
+                'name' => Str::upper($request->name),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $product_category,
+                'success' => true,
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -125,13 +125,13 @@ class ProductCategoryController extends Controller
             $product_category->delete();
 
             return response()->json([
-                "success" => true,
-                "data" => $product_category,
+                'success' => true,
+                'data' => $product_category,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }

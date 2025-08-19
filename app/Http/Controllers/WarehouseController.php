@@ -13,9 +13,9 @@ class WarehouseController extends Controller
 {
     public function index(): View
     {
-        return view("pages.warehouses.index", [
-            "page_meta" => [
-                "title" => "Warehouses",
+        return view('pages.warehouse.index', [
+            'page_meta' => [
+                'title' => 'Warehouse',
             ],
         ]);
     }
@@ -29,19 +29,19 @@ class WarehouseController extends Controller
         $orders = $request->order;
 
         $warehouses = Warehouse::query()->filter([
-            "search" => $search,
+            'search' => $search,
         ]);
 
         if ($sorts && $orders) {
-            $sortArr = explode(",", $sorts);
-            $orderArr = explode(",", $orders);
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
 
             foreach ($sortArr as $i => $sortField) {
-                $orderDir = $orderArr[$i] ?? "asc";
+                $orderDir = $orderArr[$i] ?? 'asc';
                 $warehouses->orderBy($sortField, $orderDir);
             }
         } else {
-            $warehouses->orderBy("code");
+            $warehouses->orderBy('code');
         }
 
         $total = $warehouses->count();
@@ -57,18 +57,18 @@ class WarehouseController extends Controller
 
         $rows = collect($warehouses)
             ->map(
-                fn($warehouse) => [
-                    "id" => $warehouse->id,
-                    "code" => $warehouse->code,
-                    "name" => $warehouse->name,
-                    "address" => $warehouse->address,
+                fn ($warehouse) => [
+                    'id' => $warehouse->id,
+                    'code' => $warehouse->code,
+                    'name' => $warehouse->name,
+                    'address' => $warehouse->address,
                 ],
             )
             ->toArray();
 
         return response()->json([
-            "rows" => $rows,
-            "total" => $total,
+            'rows' => $rows,
+            'total' => $total,
         ]);
     }
 
@@ -76,18 +76,18 @@ class WarehouseController extends Controller
     {
         try {
             $warehouse = Warehouse::query()->create([
-                "name" => Str::upper($request->name),
-                "address" => Str::upper($request->address),
+                'name' => Str::upper($request->name),
+                'address' => Str::upper($request->address),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $warehouse,
+                'success' => true,
+                'data' => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -96,18 +96,18 @@ class WarehouseController extends Controller
     {
         try {
             $warehouse->update([
-                "name" => Str::upper($request->name),
-                "address" => Str::upper($request->address),
+                'name' => Str::upper($request->name),
+                'address' => Str::upper($request->address),
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $warehouse,
+                'success' => true,
+                'data' => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -118,13 +118,13 @@ class WarehouseController extends Controller
             $warehouse->delete();
 
             return response()->json([
-                "success" => true,
-                "data" => $warehouse,
+                'success' => true,
+                'data' => $warehouse,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }

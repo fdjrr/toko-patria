@@ -1,8 +1,6 @@
 <div id="titlebar" style="padding:3px">
     <a href="{{ route('dashboard') }}" class="easyui-linkbutton" style="width:100%;margin-bottom:5px"
         data-options="iconCls:'icon-dashboard',size:'large',iconAlign:'top'">Home</a>
-    <a href="{{ route('transactions.index') }}" class="easyui-linkbutton" style="width:100%;margin-bottom:5px"
-        data-options="iconCls:'icon-money-bundle',size:'large',iconAlign:'top'">Trx</a>
     <a href="{{ route('customers.index') }}" class="easyui-linkbutton" style="width:100%;margin-bottom:5px"
         data-options="iconCls:'icon-contacts',size:'large',iconAlign:'top'">Customer</a>
     <a href="{{ route('warehouses.index') }}" class="easyui-linkbutton" style="width:100%;margin-bottom:5px"

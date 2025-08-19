@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,11 +13,11 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::query()->create("warehouses", function (Blueprint $table) {
+        Schema::query()->create('warehouses', function (Blueprint $table) {
             $table->id();
-            $table->string("code")->index();
-            $table->string("name");
-            $table->string("address")->nullable();
+            $table->string('code')->index();
+            $table->string('name');
+            $table->string('address')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -31,7 +32,7 @@ return new class extends Migration {
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::dropIfExists("warehouses");
+        Schema::dropIfExists('warehouses');
 
         Schema::enableForeignKeyConstraints();
     }

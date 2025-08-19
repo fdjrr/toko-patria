@@ -6,17 +6,8 @@ use App\Http\Controllers\ProductBrandController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
-use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
-
-Route::prefix('transactions')->group(function () {
-    Route::post('getTransaction', [TransactionController::class, 'getTransaction'])->name('transactions.getTransaction');
-    Route::post('store', [TransactionController::class, 'store'])->name('transactions.store');
-    Route::post('{transaction}/items', [TransactionController::class, 'getItems'])->name('transactions.getItems');
-    Route::post('{transaction}/update', [TransactionController::class, 'update'])->name('transactions.update');
-    Route::post('{transaction}/destroy', [TransactionController::class, 'destroy'])->name('transactions.destroy');
-});
 
 Route::prefix('customers')->group(function () {
     Route::post('getCustomer', [CustomerController::class, 'getCustomer'])->name('customers.getCustomer');
@@ -40,21 +31,21 @@ Route::prefix('products')->group(function () {
     Route::post('{product}/destroy', [ProductController::class, 'destroy'])->name('products.destroy');
 });
 
-Route::prefix('product_discounts')->group(function () {
+Route::prefix('product-discounts')->group(function () {
     Route::post('getDiscount', [ProductDiscountController::class, 'getDiscount'])->name('product_discounts.getDiscount');
     Route::post('store', [ProductDiscountController::class, 'store'])->name('product_discounts.store');
     Route::post('{product_discount}/update', [ProductDiscountController::class, 'update'])->name('product_discounts.update');
     Route::post('{product_discount}/destroy', [ProductDiscountController::class, 'destroy'])->name('product_discounts.destroy');
 });
 
-Route::prefix('product_categories')->group(function () {
+Route::prefix('product-categories')->group(function () {
     Route::post('getCategory', [ProductCategoryController::class, 'getCategory'])->name('product_categories.getCategory');
     Route::post('store', [ProductCategoryController::class, 'store'])->name('product_categories.store');
     Route::post('{product_category}/update', [ProductCategoryController::class, 'update'])->name('product_categories.update');
     Route::post('{product_category}/destroy', [ProductCategoryController::class, 'destroy'])->name('product_categories.destroy');
 });
 
-Route::prefix('product_brands')->group(function () {
+Route::prefix('product-brands')->group(function () {
     Route::post('getBrand', [ProductBrandController::class, 'getBrand'])->name('product_brands.getBrand');
     Route::post('store', [ProductBrandController::class, 'store'])->name('product_brands.store');
     Route::post('{product_brand}/update', [ProductBrandController::class, 'update'])->name('product_brands.update');
@@ -65,6 +56,6 @@ Route::prefix('provinces')->group(function () {
     Route::post('getProvince', [IndonesiaController::class, 'getProvince'])->name('provinces.getProvince');
 });
 
-Route::prefix('cities')->group(function () {
+Route::prefix('cities')->group(callback: function () {
     Route::post('getCity', [IndonesiaController::class, 'getCity'])->name('cities.getCity');
 });

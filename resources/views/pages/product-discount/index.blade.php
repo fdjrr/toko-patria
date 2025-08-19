@@ -43,11 +43,11 @@
     <div id="dlg" class="easyui-window" style="width:500px" data-options="closed:true,footer:'#dlg-buttons'">
         <form id="fm" method="post" novalidate style="margin:0;padding:10px">
             <div style="margin-bottom: 10px">
-                <input name="product_id" id="product_id" style="width:100%" />
+                <input name="product_id" id="product_id" required="true" style="width:100%" />
             </div>
             <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
                 <div style="margin-bottom:10px">
-                    <select class="easyui-combobox" name="discount_type" label="Discount Type:" labelPosition="top"
+                    <select class="easyui-combobox" name="discount_type" required="true" label="Discount Type:" labelPosition="top"
                         style="width:100%;">
                         @forelse ($discount_types as $key => $discount_type)
                             <option value="{{$key}}">{{$discount_type}}</option>
@@ -56,12 +56,12 @@
                     </select>
                 </div>
                 <div style="margin-bottom:10px">
-                    <input name="discount_value" class="easyui-textbox" label="Discount Value:" labelPosition="top"
+                    <input name="discount_value" class="easyui-textbox" required="true" label="Discount Value:" labelPosition="top"
                         width="100%" />
                 </div>
             </div>
             <div style="margin-bottom:10px">
-                <input name="min_purchase" class="easyui-textbox" label="Min Purchase:" labelPosition="top"
+                <input name="min_purchase" class="easyui-textbox" required="true" label="Min Purchase:" labelPosition="top"
                     width="100%" />
             </div>
             <div style="margin-bottom:10px">
@@ -73,11 +73,11 @@
             </div>
             <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:20px;">
                 <div style="margin-bottom:10px">
-                    <input name="start_date" class="easyui-datebox" label="Start Date:" labelPosition="top"
+                    <input name="start_date" class="easyui-datebox" required="true" label="Start Date:" labelPosition="top"
                         width="100%" />
                 </div>
                 <div style="margin-bottom:10px">
-                    <input name="end_date" class="easyui-datebox" label="End Date:" labelPosition="top" width="100%" />
+                    <input name="end_date" class="easyui-datebox" required="true" label="End Date:" labelPosition="top" width="100%" />
                 </div>
             </div>
             <div style="margin-bottom:10px">

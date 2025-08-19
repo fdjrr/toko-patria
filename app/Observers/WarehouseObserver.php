@@ -15,11 +15,11 @@ class WarehouseObserver
 
         if ($lastWarehouse) {
             $lastNumber = (int) str_replace('WH-', '', $lastWarehouse->code);
-            $newNumber  = $lastNumber + 1;
+            $newNumber = $lastNumber + 1;
         } else {
             $newNumber = 1;
         }
 
-        $warehouse->code = 'WH-' . str_pad($newNumber, 6, '0', STR_PAD_LEFT);
+        $warehouse->code = 'WH-'.str_pad($newNumber, 6, '0', STR_PAD_LEFT);
     }
 }

@@ -46,14 +46,6 @@ class Customer extends Model
     }
 
     /**
-     * Get all of the transactions for the Customer
-     */
-    public function transactions(): HasMany
-    {
-        return $this->hasMany(Transaction::class, 'customer_id', 'id');
-    }
-
-    /**
      * Get all of the product_reviews for the Customer
      */
     public function product_reviews(): HasMany

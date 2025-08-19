@@ -11,9 +11,9 @@ class CustomerController extends Controller
 {
     public function index()
     {
-        return view("pages.customers.index", [
-            "page_meta" => [
-                "title" => "Customers",
+        return view('pages.customer.index', [
+            'page_meta' => [
+                'title' => 'Customer',
             ],
         ]);
     }
@@ -27,31 +27,31 @@ class CustomerController extends Controller
         $orders = $request->order;
 
         $customers = Customer::query()
-            ->with(["province", "city"])
-            ->leftJoin("indonesia_provinces as province", "customers.province_id", "=", "province.id")
-            ->leftJoin("indonesia_cities as city", "customers.city_id", "=", "city.id")
-            ->select("customers.*")
+            ->with(['province', 'city'])
+            ->leftJoin('indonesia_provinces as province', 'customers.province_id', '=', 'province.id')
+            ->leftJoin('indonesia_cities as city', 'customers.city_id', '=', 'city.id')
+            ->select('customers.*')
             ->filter([
-                "search" => $search,
+                'search' => $search,
             ]);
 
         if ($sorts && $orders) {
-            $sortArr = explode(",", $sorts);
-            $orderArr = explode(",", $orders);
+            $sortArr = explode(',', $sorts);
+            $orderArr = explode(',', $orders);
 
             foreach ($sortArr as $i => $sortField) {
-                $orderDir = $orderArr[$i] ?? "asc";
+                $orderDir = $orderArr[$i] ?? 'asc';
 
-                if ($sortField === "province_name") {
-                    $customers->orderBy("province.name", $orderDir);
-                } elseif ($sortField === "city_name") {
-                    $customers->orderBy("city.name", $orderDir);
+                if ($sortField === 'province_name') {
+                    $customers->orderBy('province.name', $orderDir);
+                } elseif ($sortField === 'city_name') {
+                    $customers->orderBy('city.name', $orderDir);
                 } else {
                     $customers->orderBy("customers.$sortField", $orderDir);
                 }
             }
         } else {
-            $customers->orderBy("customers.code");
+            $customers->orderBy('customers.code');
         }
 
         $total = $customers->count();
@@ -67,23 +67,23 @@ class CustomerController extends Controller
 
         $rows = collect($customers)
             ->map(
-                fn($customer) => [
-                    "id" => $customer->id,
-                    "code" => $customer->code,
-                    "name" => $customer->name,
-                    "phone_number" => $customer->phone_number,
-                    "address" => $customer->address,
-                    "city_id" => $customer->city_id,
-                    "city_name" => $customer->city?->name,
-                    "province_id" => $customer->province_id,
-                    "province_name" => $customer->province?->name,
+                fn ($customer) => [
+                    'id' => $customer->id,
+                    'code' => $customer->code,
+                    'name' => $customer->name,
+                    'phone_number' => $customer->phone_number,
+                    'address' => $customer->address,
+                    'city_id' => $customer->city_id,
+                    'city_name' => $customer->city?->name,
+                    'province_id' => $customer->province_id,
+                    'province_name' => $customer->province?->name,
                 ],
             )
             ->toArray();
 
         return response()->json([
-            "rows" => $rows,
-            "total" => $total,
+            'rows' => $rows,
+            'total' => $total,
         ]);
     }
 
@@ -91,21 +91,21 @@ class CustomerController extends Controller
     {
         try {
             $customer = Customer::query()->create([
-                "name" => Str::upper($request->name),
-                "phone_number" => $request->phone_number,
-                "address" => Str::upper($request->address),
-                "city_id" => $request->city_id,
-                "province_id" => $request->province_id,
+                'name' => Str::upper($request->name),
+                'phone_number' => $request->phone_number,
+                'address' => Str::upper($request->address),
+                'city_id' => $request->city_id,
+                'province_id' => $request->province_id,
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $customer,
+                'success' => true,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -114,21 +114,21 @@ class CustomerController extends Controller
     {
         try {
             $customer->update([
-                "name" => Str::upper($request->name),
-                "phone_number" => $request->phone_number,
-                "address" => Str::upper($request->address),
-                "city_id" => $request->city_id,
-                "province_id" => $request->province_id,
+                'name' => Str::upper($request->name),
+                'phone_number' => $request->phone_number,
+                'address' => Str::upper($request->address),
+                'city_id' => $request->city_id,
+                'province_id' => $request->province_id,
             ]);
 
             return response()->json([
-                "success" => true,
-                "data" => $customer,
+                'success' => true,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }
@@ -139,13 +139,13 @@ class CustomerController extends Controller
             $customer->delete();
 
             return response()->json([
-                "success" => true,
-                "data" => $customer,
+                'success' => true,
+                'data' => $customer,
             ]);
         } catch (Throwable $e) {
             return response()->json([
-                "success" => false,
-                "message" => $e->getMessage(),
+                'success' => false,
+                'message' => $e->getMessage(),
             ]);
         }
     }

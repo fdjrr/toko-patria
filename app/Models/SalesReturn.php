@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockBatch extends Model
+class SalesReturn extends Model
 {
     //
 }
