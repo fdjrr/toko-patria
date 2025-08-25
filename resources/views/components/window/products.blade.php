@@ -10,7 +10,6 @@
                 <th field="part_code" width="50">Part Code</th>
                 <th field="category_name" width="50">Category</th>
                 <th field="brand_name" width="50">Brand</th>
-                <th field="price" width="50">Price</th>
                 <th field="stock" width="50">Stock</th>
             </tr>
         </thead>

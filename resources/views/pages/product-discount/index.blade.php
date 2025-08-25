@@ -14,7 +14,6 @@
             <tr>
                 <th data-options="field:'product_code',sortable:true">Code</th>
                 <th data-options="field:'product_name',sortable:true">Name</th>
-                <th data-options="field:'product_price',sortable:true,sorter:numSorter">Price</th>
                 <th data-options="field:'discount_type'">Disc Type</th>
                 <th data-options="field:'discount_value',sortable:true,sorter:numSorter">Disc Value</th>
                 <th data-options="field:'min_purchase',sortable:true,sorter:numSorter">Min Purchase</th>
